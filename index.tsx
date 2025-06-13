@@ -1,84 +1,158 @@
-import { Text, View, StyleSheet } from "react-native";
-import { Image } from "expo-image"
-import { Ionicons } from "@expo/vector-icons"
+import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
+import { Button, Pressable, StyleSheet, TextInput, View, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import * as ImagePicker from 'expo-image-picker';
+import { useState } from 'react';
 
-// npm install expo-image (usar este código no terminal)
-
-const foto = require("../assets/images/eu.jpg")
+const foto = require("../../assets/images/eu.jpg");
 
 export default function Index() {
+  const [image, setImage] = useState<string | null>(null);
+  const [name, setName] = useState("Rayssa Fagundes");
+  const [age, setAge] = useState("18 anos");
+  const [email, setEmail] = useState("fagundes.rayssa@escola.pr.gov.br");
+  const [phone, setPhone] = useState("(42) 9998-3546");
+  const [address, setAddress] = useState("Ponta Grossa / PR");
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({ 
+      mediaTypes: ['images', 'videos'],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    console.log(result);
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   return (
-    <View style={styles.container} >
-      <View style = {styles.containerImg}>
-        <Image source = {foto} style={styles.estiloFoto}></Image>
-      </View>
-      <View style = {styles.containerConteudo}>
-        <View style = {styles.containerNome}>
-          <Text style={styles.nome}>Rayssa Fagundes</Text>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={110}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
+        <View style={styles.containerImg}>
+          <Pressable onPress={pickImage}>
+            <Image source={image == null ? foto : image} style={styles.estiloFoto} />
+          </Pressable>
+          <Button title="Trocar imagem" onPress={pickImage} />
         </View>
-        <Text style = {styles.linha}>
-          _______________________________________
-        </Text>
-        <View style = {styles.containerDados}>
-          <Ionicons name="person" size={24} color="white" />
-          <Text style = {styles.textoDados}>17 anos</Text>
+        <View style={styles.containerConteudo}>
+          <View style={styles.containerNome}>
+            <TextInput
+              style={styles.nome}
+              value={name}
+              onChangeText={setName}
+              placeholder="Nome"
+              placeholderTextColor="white"
+            />
+          </View>
+          <View>
+            <TextInput
+              style={styles.linha}
+              editable={false}
+              value={"_______________________________________"}
+              selectTextOnFocus={false}
+            />
+          </View>
+          <View style={styles.containerDados}>
+            <Ionicons name="person" size={24} color="#C71585" />
+            <TextInput
+              style={styles.textoDados}
+              value={age}
+              onChangeText={setAge}
+              placeholder="Idade"
+              placeholderTextColor="#C71585"
+            />
+          </View>
+          <View style={styles.containerDados}>
+            <Ionicons name="mail" size={24} color="#C71585" />
+            <TextInput
+              style={styles.textoDados}
+              value={email}
+              onChangeText={setEmail}
+              placeholder="Email"
+              placeholderTextColor="white"
+            />
+          </View>
+          <View style={styles.containerDados}>
+            <Ionicons name="call" size={24} color="#C71585" />
+            <TextInput
+              style={styles.textoDados}
+              value={phone}
+              onChangeText={setPhone}
+              placeholder="Telefone"
+              placeholderTextColor="white"
+            />
+          </View>
+          <View style={styles.containerDados}>
+            <Ionicons name="home" size={24} color="#C71585" />
+            <TextInput
+              style={styles.textoDados}
+              value={address}
+              onChangeText={setAddress}
+              placeholder="Endereço"
+              placeholderTextColor="white"
+            />
+          </View>
         </View>
-        <View style = {styles.containerDados}>
-          <Ionicons name="mail" size={24} color="white" />
-          <Text style = {styles.textoDados}>fagundes.rayssa@escola.pr.gov.br</Text>
-        </View>
-        <View style = {styles.containerDados}>
-          <Ionicons name="call" size={24} color="white" />
-          <Text style = {styles.textoDados}>(42) 9998-3546</Text>
-        </View>
-        <View style = {styles.containerDados}>
-          <Ionicons name="home" size={24} color="white" />
-          <Text style = {styles.textoDados}>Ponta Grossa / PR</Text>
-        </View>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: "black"
   },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingVertical: 20,
+  },
   containerImg: {
-    flex: 1,
     paddingTop: 150,
+    alignItems: "center",
   },
   estiloFoto: {
     width: 300,
-    height: 300,
+    height: 280,
   },
   containerConteudo: {
-    flex: 1
+    marginTop: 55,
+    width: "90%",
   },
-  containerNome:{
-    alignItems:"center",
+  containerNome: {
+    alignItems: "center",
+   
   },
+  
   nome: {
     fontSize: 57,
     color: "white",
     fontWeight: "bold",
   },
-  linha:{
-    color: "white",
+  linha: {
+    color: "#7B68EE",
     fontSize: 28,
-    marginBottom: 10
+    marginBottom: 10,
+    textAlign: "center",
   },
   containerDados: {
     marginBottom: 8,
     flexDirection: "row",
-    alignItems: "flex-end",
+    alignItems: "center",
   },
   textoDados: {
     marginLeft: 10,
-    color: "white",
+    color: "#FFC0CB",
     fontSize: 24,
+    flex: 1,
   }
-})
+});
+
