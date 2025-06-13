@@ -1,17 +1,52 @@
-import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-export default function RootLayout() {
+import { Ionicons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
+
+export default function TabsLayout() {
   return (
-  <>
-    <StatusBar style="auto"/>
-      <Stack>
-        <Stack.Screen 
-          name="(tabs)"
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack>
-    </>
-);
+    <Tabs
+     screenOptions={{
+        headerTitleAlign: "center",
+        headerTintColor: "#7B68EE",
+        headerStyle: {
+          backgroundColor: 'black',
+        },
+        headerShadowVisible: false,
+        tabBarActiveTintColor:"#7B68EE",
+        tabBarInactiveTintColor: "#7B68EE",
+        tabBarStyle: {
+            backgroundColor: "black",
+        },
+     }}
+    >
+      <Tabs.Screen 
+        name="index"
+        options={{
+          //headerTitle: "Curriculum Vitae",
+          title: "Home",
+          tabBarIcon: ({focused, color}) => (
+          <Ionicons 
+            name={focused ? "home-sharp" : "home-outline"} 
+            color={color}
+            size={24}
+            />
+          )
+          //headerLeft: () => <></>
+        }}
+      />
+      <Tabs.Screen 
+        name="profissional" 
+        options={{
+          //headerTitle: "Sobre",
+          title: "Profissional",
+          tabBarIcon: ({focused, color}) => (
+            <Ionicons 
+              name={focused ? "hammer" : "hammer-outline"} 
+              color={color}
+              size={24}
+              />
+            )
+        }}
+      />
+    </Tabs>
+  );
 }
